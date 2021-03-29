@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { deposit } from "./store/balance/actions";
+import { selectBalance } from "./store/balance/selectors";
 
 /**
  * 
@@ -36,7 +39,10 @@ type Post = {
 };
 
 function App() {
+  const dispatch = useDispatch();
   const [posts, setPosts] = useState<Post[]>();
+
+  const balance = useSelector(selectBalance);
 
   useEffect(() => {
     async function fetchData() {
@@ -59,6 +65,17 @@ function App() {
           <p>Loading..</p>
         )}
       </ul>
+      <div>
+        <h1>My account:</h1>
+        <p>Total: {balance}</p>
+        <button
+          onClick={() => {
+            dispatch(deposit(10));
+          }}
+        >
+          Deposit 10$
+        </button>
+      </div>
     </div>
   );
 }
